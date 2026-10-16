@@ -7,6 +7,14 @@ public class SeatReservation {
     private final String passengerName;
 
     private ReservationStatus status;
+    private String seatNumber = "2A";
+    public String getSeatNumber() { return seatNumber; }
+    public void assignSeat(String seat) {
+        if (status != ReservationStatus.NEW) throw new IllegalStateException("Assign before reserve");
+        new FareCalculator().calculate(seat); seatNumber = seat;
+    }
+    void restoreSeat(String seat) { seatNumber = seat; }
+    public java.math.BigDecimal getFare() { return new FareCalculator().calculate(seatNumber); }
 
     public SeatReservation(
             String id,

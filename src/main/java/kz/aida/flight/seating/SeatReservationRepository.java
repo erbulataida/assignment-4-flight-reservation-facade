@@ -30,7 +30,8 @@ public class SeatReservationRepository {
                 reservation.getId(),
                 reservation.getFlightNumber(),
                 reservation.getPassengerName(),
-                reservation.getStatus().name()
+                reservation.getStatus().name(),
+                reservation.getSeatNumber()
         };
 
         updatedRows.add(reservationRow);
@@ -43,7 +44,7 @@ public class SeatReservationRepository {
         List<SeatReservation> reservations = new ArrayList<>();
 
         for (String[] row : rows) {
-            if (row.length != 4) {
+            if (row.length != 4 && row.length != 5) {
                 throw new IllegalStateException(
                         "Invalid reservation record: expected 4 fields"
                 );
@@ -56,6 +57,7 @@ public class SeatReservationRepository {
                     ReservationStatus.valueOf(row[3])
             );
 
+            if (row.length == 5) reservation.restoreSeat(row[4]);
             reservations.add(reservation);
         }
 

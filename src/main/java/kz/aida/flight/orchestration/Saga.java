@@ -10,6 +10,10 @@ public class Saga {
     private final double baggageKg;
 
     private SagaStatus status;
+    private String meal = "STANDARD";
+    public String getMeal() { return meal; }
+    public void setMeal(String meal) { this.meal = meal; }
+    public void markCompensating() { status = SagaStatus.COMPENSATING; }
 
     public Saga(
             String id,
@@ -79,13 +83,6 @@ public class Saga {
     }
 
     public void markCompensated() {
-        if (status != SagaStatus.STARTED
-                && status != SagaStatus.SEAT_RESERVED) {
-            throw new IllegalStateException(
-                    "Only STARTED or SEAT_RESERVED Saga can be compensated"
-            );
-        }
-
         status = SagaStatus.COMPENSATED;
     }
 

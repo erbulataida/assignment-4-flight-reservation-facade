@@ -33,7 +33,8 @@ public class SagaRepository {
                 saga.getFlightNumber(),
                 saga.getPassengerName(),
                 Double.toString(saga.getBaggageKg()),
-                saga.getStatus().name()
+                saga.getStatus().name(),
+                saga.getMeal()
         };
 
         updatedRows.add(sagaRow);
@@ -46,7 +47,7 @@ public class SagaRepository {
         List<Saga> sagas = new ArrayList<>();
 
         for (String[] row : rows) {
-            if (row.length != 7) {
+            if (row.length != 7 && row.length != 8) {
                 throw new IllegalStateException(
                         "Invalid Saga record: expected 7 fields"
                 );
@@ -62,6 +63,7 @@ public class SagaRepository {
                     SagaStatus.valueOf(row[6])
             );
 
+            if (row.length == 8) saga.setMeal(row[7]);
             sagas.add(saga);
         }
 

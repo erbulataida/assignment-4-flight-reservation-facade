@@ -5,5 +5,6 @@ public enum SagaStatus {
     SEAT_RESERVED,
     TICKET_ISSUED,
     COMPLETED,
+    COMPENSATING,
     COMPENSATED
 }

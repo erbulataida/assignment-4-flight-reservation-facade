@@ -1,0 +1,19 @@
+1 Book | 2 Inspect | 3 Manual compensation | 4 Pause after A | 5 Pause after B | 0 Exit
+SAGAS
+S1 COMPLETED Aida
+S4 COMPENSATED Dana
+S7 COMPENSATED Aliya
+S10 COMPLETED Aida
+SEATS
+R2 1A fare=80000.00 RESERVED
+R5 1A fare=80000.00 CANCELLED
+R8 1A fare=80000.00 CANCELLED
+R11 1A fare=80000.00 RESERVED
+TICKETS
+T3 ISSUED
+T9 VOIDED
+T12 ISSUED
+PREFERENCES
+S1 HALAL points=100 CONFIRMED
+S10 HALAL points=100 CONFIRMED
+1 Book | 2 Inspect | 3 Manual compensation | 4 Pause after A | 5 Pause after B | 0 Exit

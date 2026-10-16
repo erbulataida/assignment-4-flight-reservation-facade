@@ -1,0 +1,138 @@
+classDiagram
+direction TB
+class Main {
+  +main(args)
+}
+class FlightBookingFacade {
+  +bookFlight(flight, passenger, kg, meal)
+  +startBooking(...) / continueBooking(id, stopAfter)
+  +recoverPendingSagas() / compensate(id)
+}
+class BookingAdminFacade {
+  +inspect() String
+  +compensate(id)
+}
+class Saga {
+  -ids, request, meal, status
+  +markSeatReserved() / markTicketIssued()
+  +markCompleted() / markCompensating()
+}
+class SagaRepository {
+  +save(saga)
+  +findAll() / findById(id)
+}
+class SagaStatus {
+  <<enumeration>>
+  STARTED / SEAT_RESERVED / TICKET_ISSUED
+  COMPLETED / COMPENSATING / COMPENSATED
+}
+class FlightBookingResult {
+  +isCompleted() / getErrorMessage()
+  +getSagaId() / getReservationId() / getTicketId()
+}
+Main ..> FlightBookingFacade
+Main ..> BookingAdminFacade
+BookingAdminFacade --> FlightBookingFacade
+FlightBookingFacade --> SagaRepository
+SagaRepository ..> Saga
+Saga ..> SagaStatus
+FlightBookingFacade ..> FlightBookingResult
+class SeatReservationService {
+  +reserveSeat(...)
+  +cancelReservation(id)
+}
+class SeatReservation {
+  -status
+  +reserve() / cancel()
+}
+class SeatMap {
+  +availableSeat(...)
+}
+class SeatReservationRepository {
+  +save(entity)
+  +findAll() / findById(id)
+}
+class ReservationStatus {
+  <<enumeration>>
+  NEW / RESERVED / CANCELLED
+}
+FlightBookingFacade --> SeatReservationService
+BookingAdminFacade ..> SeatReservationRepository
+SeatReservationService ..> SeatReservation
+SeatReservationService --> SeatReservationRepository
+SeatReservationService ..> SeatMap
+SeatReservationRepository ..> SeatReservation
+SeatReservation ..> ReservationStatus
+class TicketingService {
+  +issueTicket(...)
+  +voidTicket(id)
+}
+class ETicket {
+  -status
+  +issue() / voidTicket()
+}
+class BaggageRulesEngine {
+  +validate(kg)
+}
+class ETicketRepository {
+  +save(entity)
+  +findAll() / findById(id)
+}
+class TicketStatus {
+  <<enumeration>>
+  NEW / ISSUED / VOIDED
+}
+FlightBookingFacade --> TicketingService
+BookingAdminFacade ..> ETicketRepository
+TicketingService ..> ETicket
+TicketingService --> ETicketRepository
+TicketingService ..> BaggageRulesEngine
+ETicketRepository ..> ETicket
+ETicket ..> TicketStatus
+class LoyaltyMealService {
+  +confirm(id, passenger, meal)
+  +cancel(id)
+}
+class TravelPreference {
+  -status
+  +confirm() / cancel()
+}
+class MealRulesEngine {
+  +loyaltyPoints(meal)
+}
+class PreferenceRepository {
+  +save(entity)
+  +findAll() / findById(id)
+}
+class PreferenceStatus {
+  <<enumeration>>
+  NEW / CONFIRMED / CANCELLED
+}
+FlightBookingFacade --> LoyaltyMealService
+BookingAdminFacade ..> PreferenceRepository
+LoyaltyMealService ..> TravelPreference
+LoyaltyMealService --> PreferenceRepository
+LoyaltyMealService ..> MealRulesEngine
+PreferenceRepository ..> TravelPreference
+TravelPreference ..> PreferenceStatus
+class FareCalculator {
+  +calculate(seatNumber) BigDecimal
+}
+class TicketIssuanceException {
+  extends RuntimeException
+}
+class CsvStore {
+  +readAll() / writeAll(rows)
+  +validateField(value)
+}
+class IdGenerator {
+  +nextId(prefix)
+}
+SeatReservation ..> FareCalculator
+BaggageRulesEngine ..> TicketIssuanceException
+SeatReservationRepository --> CsvStore
+ETicketRepository --> CsvStore
+PreferenceRepository --> CsvStore
+SagaRepository --> CsvStore
+IdGenerator --> CsvStore
+FlightBookingFacade --> IdGenerator

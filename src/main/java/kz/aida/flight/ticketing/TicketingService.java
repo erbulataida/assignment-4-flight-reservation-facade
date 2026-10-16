@@ -22,6 +22,7 @@ public class TicketingService {
             String passengerName,
             double baggageKg
     ) {
+        if (ticketRepository.findById(ticketId).isPresent()) throw new IllegalArgumentException("Duplicate ticket ID");
         baggageRulesEngine.validate(baggageKg);
 
         ETicket ticket = new ETicket(
